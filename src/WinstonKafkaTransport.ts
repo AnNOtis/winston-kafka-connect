@@ -35,7 +35,8 @@ const DEFAULTS = {
     requireAcks: 1,
     ackTimeoutMs: 100
   },
-  highWaterMark: 100
+  highWaterMark: 100,
+  onProducerError: null
 };
 
 export class WinstonKafkaTransport extends Transport {
@@ -81,7 +82,11 @@ export class WinstonKafkaTransport extends Transport {
         .on("error", err => {
           this.connected = false;
           debug(err);
-          throw new Error(err);
+          if (typeof this.options.onProducerError === "function") {
+            this.options.onProducerError(err)
+          } else {
+            throw new Error(err);
+          }
         });
     }
   }
