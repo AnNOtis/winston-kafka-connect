@@ -25,11 +25,12 @@ winston.add(new winston.transports.WinstonKafkaTransport({
     kafkaClient:{
     	kafkaHost: "localhost:9092 [,localhost:9093, localhost:9094]",
     	clientId: "winston-kafka-logger"
-	}
+	},
     topic: "winston-logs",
     name: 'WinstonKafkaLogger',
     timestamp: function() {return Date.now()},
-    formatter: JSON.stringify
+    formatter: JSON.stringify,
+    onProducerError: (err) => console.error(err)
 });
 ```
 
